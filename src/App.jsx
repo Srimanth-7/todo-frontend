@@ -1,18 +1,29 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const App = () => {
   const [task, setTask] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const [todos, setTodos] = useState([
-    {
-      text: "Complete React projects",
-      date: "2025-09-11 10:30 AM",
-      completed: false,
-    },
-  ]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+
+    return savedTodos
+      ? JSON.parse(savedTodos)
+      : [
+          {
+            text: "Complete React projects",
+            date: "2025-09-11 10:30 AM",
+            completed: false,
+          },
+        ];
+  });
+
+  // Save Todos to Local Storage
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   // Add Todo
   const addTodo = () => {
